@@ -34,7 +34,7 @@ class SlidingWindow:
         win_w = win_h = img.shape[0]/self.w_factor
         for img in self.pyramid(img):
             for (x, y, window) in self.get_window(img, window_size=(win_w, win_h)):
-                print np.sum(window)/(255*window.shape[0]*window.shape[1])
+                #print np.sum(window)/(255*window.shape[0]*window.shape[1])
                 if np.sum(window)/(255*window.shape[0]*window.shape[1]) > self.threshold:
                     img_out = imutils.resize(self.img_orig, width=int(img.shape[1]))
                     yield window
