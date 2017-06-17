@@ -3,11 +3,13 @@ from skimage.feature import hog
 from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 import cv2 as cv
 
 trained_svm_path = "round_signs_cls.pkl"
 trained_rf_path = "rf_signs_arrows_cls.pkl"
+trained_kn_path = "kn_signs_arrows_cls.pkl"
 
 positive_files_train = os.listdir('data/train/round')
 negative_files_train = os.listdir('data/train/non_round')
@@ -79,7 +81,7 @@ class HogSvmRound:
         joblib.dump(clf, trained_svm_path, compress=3)
 
 
-class HogRandomForrestArrows:
+class HogArrowsCls:
     def __init__(self, pixels_per_cell=4, cells_per_block=8):
         l_hog_fd = []
         l_labels = []
@@ -124,4 +126,9 @@ class HogRandomForrestArrows:
 
         clf = RandomForestClassifier()
         clf.fit(hog_fd, labels)
+
+        clf2 = KNeighborsClassifier(algorithm='kd_tree')
+        clf2.fit(hog_fd, labels)
+
         joblib.dump(clf, trained_rf_path, compress=3)
+        joblib.dump(clf, trained_kn_path, compress=3)
