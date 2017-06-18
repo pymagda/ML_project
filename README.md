@@ -1,11 +1,7 @@
-Road signs recognition
+### Road signs recognition
 
 Recognition of the traffic signs (turn right, turn left, go straight).
 Based on the publication: http://www.sciencedirect.com/science/article/pii/S0921889012001236.
-
-```
-Results
-```
 
 ### Movie
 
