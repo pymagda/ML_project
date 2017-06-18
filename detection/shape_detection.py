@@ -9,7 +9,7 @@ import cv2 as cv
 
 trained_svm_path = "round_signs_cls.pkl"
 trained_rf_path = "rf_signs_arrows_cls.pkl"
-trained_kn_path = "kn_signs_arrows_cls.pkl"
+trained_kn_path = "kn_signs_arrows_cls2.pkl"
 
 positive_files_train = os.listdir('data/train/round')
 negative_files_train = os.listdir('data/train/non_round')
@@ -51,7 +51,7 @@ class HogSvmRound:
             stride size and cell size of 4 pixels each. It proved to be the best compromise between processing
             requirements and performance.
             """
-            fd = hog(cv.resize(img_gray, (32, 32)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+            fd = hog(cv.resize(img_gray, (cells_per_block*pixels_per_cell, cells_per_block*pixels_per_cell)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
                      cells_per_block=(cells_per_block, cells_per_block), visualise=False)
             l_hog_fd.append(fd)
             l_labels.append(1)
@@ -67,7 +67,7 @@ class HogSvmRound:
             stride size and cell size of 4 pixels each. It proved to be the best compromise between processing
             requirements and performance.
             """
-            fd = hog(cv.resize(img_gray, (32, 32)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+            fd = hog(cv.resize(img_gray, (cells_per_block*pixels_per_cell, cells_per_block*pixels_per_cell)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
                      cells_per_block=(cells_per_block, cells_per_block), visualise=False)
 
             l_hog_fd.append(fd)
@@ -94,7 +94,7 @@ class HogArrowsCls:
             if img_gray.shape[0] < cells_per_block*pixels_per_cell or \
                 img_gray.shape[1] < cells_per_block*pixels_per_cell: continue
 
-            fd = hog(cv.resize(img_gray, (32, 32)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+            fd = hog(cv.resize(img_gray, (cells_per_block*pixels_per_cell, cells_per_block*pixels_per_cell)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
                      cells_per_block=(cells_per_block, cells_per_block), visualise=False)
             l_hog_fd.append(fd)
             l_labels.append(Arrows.left)
@@ -105,7 +105,7 @@ class HogArrowsCls:
             if img_gray.shape[0] < cells_per_block*pixels_per_cell or \
                 img_gray.shape[1] < cells_per_block*pixels_per_cell: continue
 
-            fd = hog(cv.resize(img_gray, (32, 32)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+            fd = hog(cv.resize(img_gray, (cells_per_block*pixels_per_cell, cells_per_block*pixels_per_cell)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
                      cells_per_block=(cells_per_block, cells_per_block), visualise=False)
             l_hog_fd.append(fd)
             l_labels.append(Arrows.right)
@@ -116,7 +116,7 @@ class HogArrowsCls:
             if img_gray.shape[0] < cells_per_block*pixels_per_cell or \
                 img_gray.shape[1] < cells_per_block*pixels_per_cell: continue
 
-            fd = hog(cv.resize(img_gray, (32, 32)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
+            fd = hog(cv.resize(img_gray, (cells_per_block*pixels_per_cell, cells_per_block*pixels_per_cell)), orientations=9, pixels_per_cell=(pixels_per_cell, pixels_per_cell),
                      cells_per_block=(cells_per_block, cells_per_block), visualise=False)
             l_hog_fd.append(fd)
             l_labels.append(Arrows.straight)
@@ -124,11 +124,11 @@ class HogArrowsCls:
         hog_fd = np.array(l_hog_fd, 'float64')
         labels = np.array(l_labels, 'int')
 
-        clf = RandomForestClassifier()
-        clf.fit(hog_fd, labels)
+        #clf = RandomForestClassifier()
+        #clf.fit(hog_fd, labels)
 
         clf2 = KNeighborsClassifier(algorithm='kd_tree')
         clf2.fit(hog_fd, labels)
 
-        joblib.dump(clf, trained_rf_path, compress=3)
-        joblib.dump(clf, trained_kn_path, compress=3)
+        #joblib.dump(clf, trained_rf_path, compress=3)
+        joblib.dump(clf2, trained_kn_path, compress=3)
