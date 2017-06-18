@@ -124,11 +124,11 @@ class HogArrowsCls:
         hog_fd = np.array(l_hog_fd, 'float64')
         labels = np.array(l_labels, 'int')
 
-        #clf = RandomForestClassifier()
-        #clf.fit(hog_fd, labels)
+        clf = RandomForestClassifier()
+        clf.fit(hog_fd, labels)
 
         clf2 = KNeighborsClassifier(algorithm='kd_tree')
         clf2.fit(hog_fd, labels)
 
-        #joblib.dump(clf, trained_rf_path, compress=3)
+        joblib.dump(clf, trained_rf_path, compress=3)
         joblib.dump(clf2, trained_kn_path, compress=3)
